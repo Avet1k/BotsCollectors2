@@ -8,9 +8,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 628351346400536337, guid: d3de806b29b1ee048bce3683dfcbdc93, type: 3}
+      propertyPath: _speed
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 3743350161906578867, guid: d3de806b29b1ee048bce3683dfcbdc93, type: 3}
       propertyPath: m_Name
-      value: Drone_truck
+      value: DroneTruck
       objectReference: {fileID: 0}
     - target: {fileID: 4087260268171095817, guid: d3de806b29b1ee048bce3683dfcbdc93, type: 3}
       propertyPath: m_LocalPosition.x
