@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DroneTruck : MonoBehaviour
+public class Drone: MonoBehaviour
 {
     [SerializeField] private float _speed;
-    
+
     private Crystal _crystal;
-    
+
     public void BringCrystal(Crystal crystal)
     {
         _crystal = crystal;
         StartCoroutine(Moving(_crystal.transform.position));
-        GrabCrystal(_crystal); 
+        GrabCrystal(_crystal);
     }
-    
+
     private IEnumerator Moving(Vector3 target)
     {
         while (transform.position != target)

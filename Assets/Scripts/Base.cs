@@ -24,6 +24,6 @@ public class Base : MonoBehaviour
 
     private void OnCrystalDetected(Crystal crystal)
     {
-        Debug.Log($"Crystal detected: {crystal.name}");
+        
     }
 }
