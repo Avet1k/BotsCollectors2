@@ -67,6 +67,7 @@ public class CrystalSpawner : MonoBehaviour
 
     private void ReleaseCrystal(Crystal crystal)
     {
+        crystal.Collected -= ReleaseCrystal;
         _pool.Release(crystal);
         _totalCrystals--;
     }
