@@ -13,5 +13,6 @@ public class CrystalCounter : MonoBehaviour
     {
         _quantity++;
         OnCrystalsChanged?.Invoke(_quantity);
+        Debug.Log($"Crystals: {_quantity}");
     }
 }

@@ -59,7 +59,10 @@ public class CrystalSpawner : MonoBehaviour
 
     private Crystal GetCrystal()
     {
-        return _pool.Get();
+        Crystal crystal = _pool.Get();
+        crystal.Collected += ReleaseCrystal;
+        
+        return crystal;
     }
 
     private void ReleaseCrystal(Crystal crystal)

@@ -5,11 +5,11 @@ using UnityEngine.Events;
 
 public class Crystal : MonoBehaviour
 {
-    public event UnityAction<Crystal> Transferred;
+    public event UnityAction<Crystal> Collected;
     
-    public void Transfer()
+    public void Collect()
     {
-        Transferred?.Invoke(this);
+        Collected?.Invoke(this);
     }
     
     public void SetActive(bool value)

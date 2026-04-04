@@ -1,20 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class Drone: MonoBehaviour
+public class Mover : MonoBehaviour
 {
     [SerializeField] private float _speed = 40f;
 
-    private Crystal _crystal;
+    public event UnityAction TargetReached;
 
-    public void BringCrystal(Crystal crystal)
+    public void MoveTo(Vector3 target)
     {
-        _crystal = crystal;
-        
-        StartCoroutine(Moving(_crystal.transform.position));
+        StartCoroutine(Moving(target));
     }
-
+    
     private IEnumerator Moving(Vector3 target)
     {
         while (transform.rotation != Quaternion.LookRotation(target - transform.position))
@@ -30,13 +29,10 @@ public class Drone: MonoBehaviour
         while (transform.position != target)
         {
             transform.position = Vector3.MoveTowards(transform.position, target, _speed * Time.deltaTime);
-            
+
             yield return null;
         }
-    }
-
-    private void GrabCrystal(Crystal crystal)
-    {
-        // TODO: Pick up the crystal
+        
+        TargetReached?.Invoke();
     }
 }
