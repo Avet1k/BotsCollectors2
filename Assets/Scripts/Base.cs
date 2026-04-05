@@ -34,9 +34,12 @@ public class Base : MonoBehaviour
     {
         if (_crystalsInTask.Contains(crystal))
             return;
-            
-        _collector.BringCrystal(crystal);
-        _crystalsInTask.Add(crystal);
+        
+        if (_collector.DronesAvailable > 0)
+        {
+            _collector.BringCrystal(crystal);
+            _crystalsInTask.Add(crystal);
+        }
     }
 
     private void TakeCrystal(Crystal crystal)

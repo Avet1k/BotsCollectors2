@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: _speed
       value: 40
       objectReference: {fileID: 0}
+    - target: {fileID: 628351346400536337, guid: d3de806b29b1ee048bce3683dfcbdc93, type: 3}
+      propertyPath: _baseOffset.z
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 1189383180165606887, guid: d3de806b29b1ee048bce3683dfcbdc93, type: 3}
       propertyPath: _speed
       value: 80
