@@ -31,6 +31,7 @@ public class Drone: MonoBehaviour
 
     private void MoveToCrystal()
     {
+        _rotator.Rotated -= MoveToCrystal;
         _mover.TargetReached += GrabCrystal;
         _mover.MoveTo(_crystal.transform.position);
     }
@@ -38,18 +39,25 @@ public class Drone: MonoBehaviour
     private void GrabCrystal()
     {
         _mover.TargetReached -= GrabCrystal;
-        _grabber.CrystalGrabbed += MoveToBase;
+        _grabber.CrystalGrabbed += RotateToBase;
         _grabber.Grab(_crystal);
     }
-
-    private void MoveToBase(bool isGrabbed)
+    
+    private void RotateToBase(bool isGrabbed)
     {
-        _grabber.CrystalGrabbed -= MoveToBase;
-        _mover.TargetReached += ReleaseCrystal;
-        _mover.MoveTo(transform.parent.position + _baseOffset);
+        _grabber.CrystalGrabbed -= RotateToBase;
+        _rotator.Rotated += MoveToBase;
+        _rotator.RotateTowards(transform.parent.position + _baseOffset);
         
         if (isGrabbed != true)
             _crystal = null;
+    }
+
+    private void MoveToBase()
+    {
+        _rotator.Rotated -= MoveToBase;
+        _mover.TargetReached += ReleaseCrystal;
+        _mover.MoveTo(transform.parent.position + _baseOffset);
     }
 
     private void ReleaseCrystal()
