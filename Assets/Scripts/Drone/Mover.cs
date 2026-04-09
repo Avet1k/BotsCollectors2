@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,19 +15,12 @@ public class Mover : MonoBehaviour
     
     private IEnumerator Moving(Vector3 target)
     {
-        while (transform.rotation != Quaternion.LookRotation(target - transform.position))
-        {
-            transform.rotation = Quaternion.RotateTowards(
-                transform.rotation,
-                Quaternion.LookRotation(target - transform.position),
-                _speed * Time.deltaTime);
-            
-            yield return null;
-        }
-
         while (transform.position != target)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target, _speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                target,
+                _speed * Time.deltaTime);
 
             yield return null;
         }

@@ -68,6 +68,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1488839329201538974, guid: f253ddfd56c00134494cabac0afd89d2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 155306063638408798}
+    - targetCorrespondingSourceObject: {fileID: 1488839329201538974, guid: f253ddfd56c00134494cabac0afd89d2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6949782175972217516}
   m_SourcePrefab: {fileID: 100100000, guid: f253ddfd56c00134494cabac0afd89d2, type: 3}
 --- !u!1 &4613118907105354078 stripped
 GameObject:
@@ -136,4 +139,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca0a2b22f4c8267a789a6263354c3ed5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  droneTruck: {fileID: 0}
+  _dronePrefab: {fileID: 1937502456913926713, guid: 7f14603f0039345f896828c8e1255a02, type: 3}
+--- !u!114 &6949782175972217516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4613118907105354078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86869cace29bb8f1b982206ba0da4b96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

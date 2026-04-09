@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -51,7 +50,7 @@ public class CrystalSpawner : MonoBehaviour
         }
     }
 
-    public void Spawn(Crystal crystal)
+    private void Spawn(Crystal crystal)
     {
         crystal.SetActive(true);
         _totalCrystals++;

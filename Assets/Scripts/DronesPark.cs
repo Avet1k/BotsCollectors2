@@ -1,31 +1,37 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class Collector : MonoBehaviour
+public class DronesPark : MonoBehaviour
 {
     [SerializeField] private Drone _dronePrefab;
-    [SerializeField] private readonly int _dronesCount = 3;
+    [SerializeField] private int _dronesCount = 3;
 
     private Queue<Drone> _drones;
-    
-    public event UnityAction<Crystal> CrystalIsBrought;
-    
-    public int DronesAvailable => _drones.Count;
 
     private void Start()
     {
         SpawnDrones();
     }
-    
-    public void BringCrystal(Crystal crystal)
+
+    public bool TryGetDrone(out Drone drone)
     {
-        if (_drones.Count == 0) return;
+        if (_drones.Count == 0)
+        {
+            drone = null;
+            
+            return false;
+        }
+
+        drone = _drones.Dequeue();
+        drone.CrystalIsBrought += ReleaseDrone;
         
-        Drone drone = _drones.Dequeue();
-        drone.CrystalIsBrought += ReplaceCrystal;
-        drone.BringCrystal(crystal);
+        return true;
+    }
+
+    private void ReleaseDrone(Crystal _, Drone drone)
+    {
+        drone.CrystalIsBrought -= ReleaseDrone;
+        _drones.Enqueue(drone);
     }
 
     private void SpawnDrones()
@@ -52,12 +58,5 @@ public class Collector : MonoBehaviour
 
             _drones.Enqueue(drone);
         }
-    }
-    
-    private void ReplaceCrystal(Crystal crystal, Drone drone)
-    {
-        drone.CrystalIsBrought -= ReplaceCrystal;
-        _drones.Enqueue(drone);
-        CrystalIsBrought?.Invoke(crystal);
     }
 }

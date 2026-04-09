@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Graber : MonoBehaviour
 {
-    [SerializeField] private Vector3 _crystalOffset = new Vector3 (0.17f, 4.8f, -3.82f);
+    [SerializeField] private Vector3 _crystalOffset = new (0.17f, 4.8f, -3.82f);
     
     public event UnityAction<bool> CrystalGrabbed;
     
