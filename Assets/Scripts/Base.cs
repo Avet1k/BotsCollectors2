@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CrystalDetector), typeof(DronesPark), typeof(CrystalCounter))]
+[RequireComponent(typeof(CrystalDetector), typeof(DronesPark))]
 public class Base : MonoBehaviour
 {
+    [SerializeField] private CrystalCounter _crystalCounter;
+    
     private CrystalDetector _crystalDetector;
     private DronesPark _dronesPark;
-    private CrystalCounter _crystalCounter;
     private List<Crystal> _crystalsInTask;
 
     private void Awake()
@@ -14,7 +15,6 @@ public class Base : MonoBehaviour
         _crystalDetector = GetComponent<CrystalDetector>();
         _dronesPark = GetComponent<DronesPark>();
         _crystalsInTask = new List<Crystal>();
-        _crystalCounter = GetComponent<CrystalCounter>();
     }
 
     private void OnEnable()
@@ -40,11 +40,12 @@ public class Base : MonoBehaviour
         }
     }
 
-    private void TakeCrystal(Crystal crystal, Drone _)
+    private void TakeCrystal(Crystal crystal, Drone drone)
     {
         if (crystal is null)
             return;
-        
+
+        drone.CrystalIsBrought -= TakeCrystal;
         _crystalsInTask.Remove(crystal);
         crystal.Collect();
         _crystalCounter.AddCrystal();

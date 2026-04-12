@@ -58,9 +58,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1488839329201538974, guid: f253ddfd56c00134494cabac0afd89d2, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4819421192842849857}
-    - targetCorrespondingSourceObject: {fileID: 1488839329201538974, guid: f253ddfd56c00134494cabac0afd89d2, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 4060569634055125562}
     - targetCorrespondingSourceObject: {fileID: 1488839329201538974, guid: f253ddfd56c00134494cabac0afd89d2, type: 3}
       insertIndex: -1
@@ -77,27 +74,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1488839329201538974, guid: f253ddfd56c00134494cabac0afd89d2, type: 3}
   m_PrefabInstance: {fileID: 6101388274798388928}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &4819421192842849857
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4613118907105354078}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 38.2, y: 11.216846, z: 35.4}
-  m_Center: {x: -0.00000333786, y: 5.608423, z: 1.8761754}
 --- !u!114 &4060569634055125562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,6 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dronePrefab: {fileID: 1937502456913926713, guid: 7f14603f0039345f896828c8e1255a02, type: 3}
+  _dronesCount: 3
 --- !u!114 &6949782175972217516
 MonoBehaviour:
   m_ObjectHideFlags: 0
