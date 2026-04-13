@@ -5,12 +5,11 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Mover), typeof(Rotator), typeof(Graber))]
 public class Drone: MonoBehaviour
 {
-    [SerializeField] private Vector3 _baseOffset = new (0, 0, 10);
-    
     private Mover _mover;
     private Rotator _rotator;
     private Graber _grabber;
     private Crystal _crystal;
+    private Vector3 _crystalReleasePoint;
     
     public event UnityAction<Crystal, Drone> CrystalIsBrought;
     
@@ -21,6 +20,11 @@ public class Drone: MonoBehaviour
         _grabber = GetComponent<Graber>();
     }
 
+    public void SetReleasePoint(Vector3 point)
+    {
+        _crystalReleasePoint = point;
+    }
+    
     public void BringCrystal(Crystal crystal)
     {
         _crystal = crystal;
@@ -47,7 +51,7 @@ public class Drone: MonoBehaviour
     {
         _grabber.CrystalGrabbed -= RotateToBase;
         _rotator.Rotated += MoveToBase;
-        _rotator.RotateTowards(transform.parent.position + _baseOffset);
+        _rotator.RotateTowards(_crystalReleasePoint);
         
         if (isGrabbed != true)
             _crystal = null;
@@ -57,7 +61,7 @@ public class Drone: MonoBehaviour
     {
         _rotator.Rotated -= MoveToBase;
         _mover.TargetReached += ReleaseCrystal;
-        _mover.MoveTo(transform.parent.position + _baseOffset);
+        _mover.MoveTo(_crystalReleasePoint);
     }
 
     private void ReleaseCrystal()

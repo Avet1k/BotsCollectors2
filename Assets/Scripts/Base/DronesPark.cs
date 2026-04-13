@@ -5,6 +5,7 @@ public class DronesPark : MonoBehaviour
 {
     [SerializeField] private Drone _dronePrefab;
     [SerializeField] private int _dronesCount = 3;
+    [SerializeField] private SpawnPoint _spawnPoint;
 
     private Queue<Drone> _drones;
 
@@ -37,9 +38,7 @@ public class DronesPark : MonoBehaviour
     private void SpawnDrones()
     {
         float offsetX = 20;
-        float offsetZ = 30;
-        float firstPositionX = transform.position.x - offsetX * (_dronesCount - 1) / 2;
-        float positionZ = offsetZ + transform.position.z;
+        float firstPositionX = _spawnPoint.transform.position.x - offsetX * (_dronesCount - 1) / 2;
 
         _drones = new Queue<Drone>();
 
@@ -47,15 +46,16 @@ public class DronesPark : MonoBehaviour
         {
             Vector3 position = new Vector3(
                 firstPositionX + offsetX * i,
-                transform.position.y,
-                positionZ);
+                _spawnPoint.transform.position.y,
+                _spawnPoint.transform.position.z);
 
             Drone drone = Instantiate(
                 _dronePrefab,
                 position,
-                Quaternion.identity,
+                _spawnPoint.transform.rotation,
                 transform);
-
+            
+            drone.SetReleasePoint(_spawnPoint.transform.position);
             _drones.Enqueue(drone);
         }
     }
