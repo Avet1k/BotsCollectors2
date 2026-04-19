@@ -5,7 +5,6 @@ using UnityEngine;
 public class Base : MonoBehaviour
 {
     [SerializeField] private CrystalCounter _crystalCounter;
-    [SerializeField] private SpawnPoint _spawnPoint;
     
     private CrystalDetector _crystalDetector;
     private DronesPark _dronesPark;
