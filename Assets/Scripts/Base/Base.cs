@@ -96,7 +96,7 @@ public class Base : MonoBehaviour
         drone.BuildNewBase(_flag);
         _dronesPark.ReleaseDrone(drone);
         _flag = null;
-        StartCoroutine(SpawningDrones());
+        _spawningDrone = StartCoroutine(SpawningDrones());
     }
 
     private void OnCrystalDetected(Crystal crystal)
@@ -107,6 +107,7 @@ public class Base : MonoBehaviour
         if (_dronesPark.TryGetDrone(out Drone drone))
         {
             drone.TaskCompleted += TakeCrystal;
+            crystal.ReserveCrystal();
             drone.BringCrystal(crystal);
             _crystalsInTask.Add(crystal);
         }

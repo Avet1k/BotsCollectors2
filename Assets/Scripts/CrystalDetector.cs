@@ -31,10 +31,12 @@ public class CrystalDetector : MonoBehaviour
     {
         Collider[] crystals = Physics.OverlapSphere(transform.position, _detectRadius, _crystalLayer);
         
-        foreach (var crystal in crystals)
+        foreach (var crystalCollider in crystals)
         {
-            if (crystal.transform.parent is null)
-                Detected?.Invoke(crystal.GetComponent<Crystal>());
+            Crystal crystal = crystalCollider.GetComponent<Crystal>();
+
+            if (crystal.IsReserved == false)
+                Detected?.Invoke(crystal);
         }
     }
 }
