@@ -1,17 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DronesPark : MonoBehaviour
 {
     [SerializeField] private Drone _dronePrefab;
-    [SerializeField] private int _dronesCount = 3;
+    [SerializeField] private int _dronesToSpawn;
     [SerializeField] private SpawnPoint _spawnPoint;
 
     private Queue<Drone> _drones;
+    
+    public int DronesAvailable { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
-        SpawnDrones();
+        _drones = new Queue<Drone>();
+        SpawnDrones(_dronesToSpawn);
     }
 
     public bool TryGetDrone(out Drone drone)
@@ -24,25 +28,30 @@ public class DronesPark : MonoBehaviour
         }
 
         drone = _drones.Dequeue();
-        drone.CrystalIsBrought += ReleaseDrone;
+        drone.TaskCompleted += ParkDrone;
         
         return true;
     }
 
-    private void ReleaseDrone(Crystal _, Drone drone)
+    public void ParkNewDrone(Drone drone)
     {
-        drone.CrystalIsBrought -= ReleaseDrone;
         _drones.Enqueue(drone);
+        drone.SetReleasePoint(_spawnPoint.transform.position);
+        DronesAvailable++;
     }
 
-    private void SpawnDrones()
+    public void ReleaseDrone(Drone drone)
+    {
+        drone.TaskCompleted -= ParkDrone;
+        DronesAvailable--;
+    }
+    
+    public void SpawnDrones(int amount)
     {
         float offsetX = 20;
-        float firstPositionX = _spawnPoint.transform.position.x - offsetX * (_dronesCount - 1) / 2;
-
-        _drones = new Queue<Drone>();
-
-        for (int i = 0; i < _dronesCount; i++)
+        float firstPositionX = _spawnPoint.transform.position.x - offsetX * (amount - 1) / 2;
+        
+        for (int i = 0; i < amount; i++)
         {
             Vector3 position = new Vector3(
                 firstPositionX + offsetX * i,
@@ -55,8 +64,13 @@ public class DronesPark : MonoBehaviour
                 _spawnPoint.transform.rotation,
                 transform);
             
-            drone.SetReleasePoint(_spawnPoint.transform.position);
-            _drones.Enqueue(drone);
+            ParkNewDrone(drone);
         }
+    }
+
+    private void ParkDrone(Crystal _, Drone drone)
+    {
+        drone.TaskCompleted -= ParkDrone;
+        _drones.Enqueue(drone);
     }
 }

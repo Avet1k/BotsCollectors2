@@ -3,13 +3,19 @@ using UnityEngine.Events;
 
 public class CrystalCounter : MonoBehaviour
 {
-    private int _quantity = 0;
+    public int Quantity { get; private set; } = 0;
 
     public event UnityAction<int> OnCrystalsChanged;
 
     public void AddCrystal()
     {
-        _quantity++;
-        OnCrystalsChanged?.Invoke(_quantity);
+        Quantity++;
+        OnCrystalsChanged?.Invoke(Quantity);
+    }
+
+    public void RemoveCrystals(int value)
+    {
+        Quantity -= value;
+        OnCrystalsChanged?.Invoke(Quantity);
     }
 }

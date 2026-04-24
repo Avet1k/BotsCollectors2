@@ -11,7 +11,7 @@ public class Graber : MonoBehaviour
     {
         bool isGrabbed;
 
-        if (crystal.transform.position == transform.position)
+        if (crystal is not null && crystal.isActiveAndEnabled && crystal.transform.position == transform.position)
         {
             crystal.transform.parent = transform;
             crystal.transform.localPosition = _crystalOffset;

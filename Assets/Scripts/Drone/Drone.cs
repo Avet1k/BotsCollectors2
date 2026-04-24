@@ -1,23 +1,36 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
 
 [RequireComponent(typeof(Mover), typeof(Rotator), typeof(Graber))]
+[RequireComponent(typeof(Builder))]
 public class Drone: MonoBehaviour
 {
     private Mover _mover;
     private Rotator _rotator;
     private Graber _grabber;
+    private Builder _builder;
     private Crystal _crystal;
     private Vector3 _crystalReleasePoint;
+    private Flag _flag;
     
-    public event UnityAction<Crystal, Drone> CrystalIsBrought;
+    public bool IsCrystalOnBoard { get; private set; }
+    
+    public event UnityAction<Crystal, Drone> TaskCompleted;
     
     private void Awake()
     {
         _mover = GetComponent<Mover>();
         _rotator = GetComponent<Rotator>();
         _grabber = GetComponent<Graber>();
+        _builder = GetComponent<Builder>();
+    }
+
+    private void Start()
+    {
+        _crystal = null;
+        _flag = null;
     }
 
     public void SetReleasePoint(Vector3 point)
@@ -28,9 +41,38 @@ public class Drone: MonoBehaviour
     public void BringCrystal(Crystal crystal)
     {
         _crystal = crystal;
-
         _rotator.Rotated += MoveToCrystal;
         _rotator.RotateTowards(_crystal.transform.position);
+    }
+    
+    public void BuildNewBase(Flag flag)
+    {
+        _flag = flag;
+        _rotator.Rotated += MoveToFLag;
+        _rotator.RotateTowards(_flag.transform.position);
+    }
+
+    private void MoveToFLag()
+    {
+        _rotator.Rotated -= MoveToFLag;
+        _mover.TargetReached += Build;
+        _mover.MoveTo(_flag.transform.position);
+    }
+    
+    private void Build()
+    {
+        _mover.TargetReached -= Build;
+        _builder.BaseBuilt += RequestParking;
+        _builder.BuildBase();
+        _flag.SetActive(false);
+        TaskCompleted?.Invoke(null, this);
+    }
+
+    private void RequestParking(Base builtBase)
+    {
+        _builder.BaseBuilt -= RequestParking;
+        transform.parent = builtBase.transform;
+        builtBase.RequestParking(this);
     }
 
     private void MoveToCrystal()
@@ -49,12 +91,19 @@ public class Drone: MonoBehaviour
     
     private void RotateToBase(bool isGrabbed)
     {
+        IsCrystalOnBoard = isGrabbed;
         _grabber.CrystalGrabbed -= RotateToBase;
+        
+        if (IsCrystalOnBoard == false)
+        {
+            TaskCompleted?.Invoke(_crystal, this);
+            _crystal = null;
+            
+            return;
+        }
+        
         _rotator.Rotated += MoveToBase;
         _rotator.RotateTowards(_crystalReleasePoint);
-        
-        if (isGrabbed != true)
-            _crystal = null;
     }
 
     private void MoveToBase()
@@ -67,12 +116,13 @@ public class Drone: MonoBehaviour
     private void ReleaseCrystal()
     {
         _mover.TargetReached -= ReleaseCrystal;
-        CrystalIsBrought?.Invoke(_crystal, this);
+        TaskCompleted?.Invoke(_crystal, this);
 
-        if (_crystal is not null)
+        if (IsCrystalOnBoard)
         {
             _crystal.transform.parent = null;
             _crystal = null;
+            IsCrystalOnBoard = false;
         }
     }
 }

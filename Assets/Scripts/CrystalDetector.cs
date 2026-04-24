@@ -33,7 +33,8 @@ public class CrystalDetector : MonoBehaviour
         
         foreach (var crystal in crystals)
         {
-            Detected?.Invoke(crystal.GetComponent<Crystal>());
+            if (crystal.transform.parent is null)
+                Detected?.Invoke(crystal.GetComponent<Crystal>());
         }
     }
 }
