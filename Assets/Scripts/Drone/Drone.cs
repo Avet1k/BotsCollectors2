@@ -12,6 +12,7 @@ public class Drone: MonoBehaviour
     private Graber _grabber;
     private Builder _builder;
     private Crystal _crystal;
+    private CrystalReserver _crystalReserver;
     private Vector3 _crystalReleasePoint;
     private Flag _flag;
     
@@ -31,6 +32,12 @@ public class Drone: MonoBehaviour
     {
         _crystal = null;
         _flag = null;
+    }
+
+    public void SetCrystalReserver(CrystalReserver crystalReserver)
+    {
+        _crystalReserver = crystalReserver;
+        _builder.SetCrystalReserver(_crystalReserver);
     }
 
     public void SetReleasePoint(Vector3 point)

@@ -9,8 +9,8 @@ public class CrystalDetector : MonoBehaviour
     [SerializeField] LayerMask _crystalLayer;
     
     public event UnityAction<Crystal> Detected;
-    
-    private void Start()
+
+    public void StartDetection()
     {
         StartCoroutine(DetectingCrystals());
     }
@@ -35,8 +35,7 @@ public class CrystalDetector : MonoBehaviour
         {
             Crystal crystal = crystalCollider.GetComponent<Crystal>();
 
-            if (crystal.IsReserved == false)
-                Detected?.Invoke(crystal);
+            Detected?.Invoke(crystal);
         }
     }
 }

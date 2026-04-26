@@ -469,7 +469,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _crystalCounter: {fileID: 3633561916278119947}
+  _crystalReserver: {fileID: 0}
   _buildCost: 5
+  _droneCost: 3
+  _startDrones: 0
 --- !u!114 &155306063638408798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -483,7 +486,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dronePrefab: {fileID: 1937502456913926713, guid: 7f14603f0039345f896828c8e1255a02, type: 3}
-  _dronesToSpawn: 0
   _spawnPoint: {fileID: 8371334984884401780}
 --- !u!65 &8971218113836584080
 BoxCollider:

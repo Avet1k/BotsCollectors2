@@ -5,9 +5,9 @@ using UnityEngine.Events;
 public class DronesPark : MonoBehaviour
 {
     [SerializeField] private Drone _dronePrefab;
-    [SerializeField] private int _dronesToSpawn;
     [SerializeField] private SpawnPoint _spawnPoint;
 
+    private CrystalReserver _crystalReserver;
     private Queue<Drone> _drones;
     
     public int DronesAvailable { get; private set; }
@@ -15,9 +15,13 @@ public class DronesPark : MonoBehaviour
     private void Awake()
     {
         _drones = new Queue<Drone>();
-        SpawnDrones(_dronesToSpawn);
     }
 
+    public void SetCrystalReserver(CrystalReserver crystalReserver)
+    {
+        _crystalReserver = crystalReserver;
+    }
+    
     public bool TryGetDrone(out Drone drone)
     {
         if (_drones.Count == 0)
@@ -64,6 +68,7 @@ public class DronesPark : MonoBehaviour
                 _spawnPoint.transform.rotation,
                 transform);
             
+            drone.SetCrystalReserver(_crystalReserver);
             ParkNewDrone(drone);
         }
     }

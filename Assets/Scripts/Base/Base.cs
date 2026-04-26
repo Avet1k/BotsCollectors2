@@ -10,13 +10,14 @@ using UnityEngine.Events;
 public class Base : MonoBehaviour
 {
     [SerializeField] private CrystalCounter _crystalCounter;
+    [SerializeField] private CrystalReserver _crystalReserver;
     [SerializeField] private int _buildCost = 5;
     [SerializeField] private int _droneCost = 3;
+    [SerializeField] private int _startDrones = 0;
     
     private CrystalDetector _crystalDetector;
     private DronesPark _dronesPark;
     private FlagPlacer _flagPlacer;
-    private List<Crystal> _crystalsInTask;
     private Flag _flag;
     private bool _isClicked;
     private int _dronesReserved = 1;
@@ -29,7 +30,6 @@ public class Base : MonoBehaviour
         _crystalDetector = GetComponent<CrystalDetector>();
         _dronesPark = GetComponent<DronesPark>();
         _flagPlacer = GetComponent<FlagPlacer>();
-        _crystalsInTask = new List<Crystal>();
     }
 
     private void OnEnable()
@@ -45,7 +45,8 @@ public class Base : MonoBehaviour
     private void Start()
     {
         _flag = null;
-        _spawningDrone = StartCoroutine(SpawningDrones());
+        
+        Initialize(_crystalReserver);
     }                                                    
 
     private void OnMouseDown()
@@ -58,6 +59,18 @@ public class Base : MonoBehaviour
         }
     }
 
+    public void Initialize(CrystalReserver crystalReserver)
+    {
+        _dronesPark.SetCrystalReserver(crystalReserver);
+        
+        if (_crystalReserver is null)
+            _crystalReserver = crystalReserver;
+        
+        _dronesPark.SpawnDrones(_startDrones);
+        _spawningDrone = StartCoroutine(SpawningDrones());
+        _crystalDetector.StartDetection();
+    }
+    
     public void RequestParking(Drone drone)
     {
         _dronesPark.ParkNewDrone(drone);
@@ -101,15 +114,14 @@ public class Base : MonoBehaviour
 
     private void OnCrystalDetected(Crystal crystal)
     {
-        if (_crystalsInTask.Contains(crystal))
+        if (_crystalReserver.IsCrystalReserved(crystal))
             return;
         
         if (_dronesPark.TryGetDrone(out Drone drone))
         {
             drone.TaskCompleted += TakeCrystal;
-            crystal.ReserveCrystal();
             drone.BringCrystal(crystal);
-            _crystalsInTask.Add(crystal);
+            _crystalReserver.ReserveCrystal(crystal);
         }
     }
 
@@ -123,7 +135,7 @@ public class Base : MonoBehaviour
             _crystalCounter.AddCrystal();
         }
         
-        _crystalsInTask.Remove(crystal);
+        _crystalReserver.CancelReservation(crystal);
     }
 
     private IEnumerator SpawningDrones()
