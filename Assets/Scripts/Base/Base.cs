@@ -1,8 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 [RequireComponent(typeof(CrystalDetector),
     typeof(DronesPark),
@@ -20,7 +17,6 @@ public class Base : MonoBehaviour
     private FlagPlacer _flagPlacer;
     private Flag _flag;
     private int _dronesReserved = 1;
-    private Coroutine _spawningDrone;
 
     private void Awake()
     {
@@ -81,10 +77,9 @@ public class Base : MonoBehaviour
     private void OnGettingDrone(Drone drone)
     {
         _crystalCounter.RemoveCrystals(_buildCost);
-        drone.BuildNewBase(_flag);
+        StartCoroutine(drone.BuildingNewBase(_flag));
         _dronesPark.ReleaseDrone(drone);
         _flag = null;
-        //TODO event counter -
     }
 
     private void OnCrystalDetected(Crystal crystal)
@@ -95,7 +90,7 @@ public class Base : MonoBehaviour
         if (_dronesPark.TryGetDrone(out Drone drone))
         {
             drone.TaskCompleted += TakeCrystal;
-            drone.BringCrystal(crystal);
+            StartCoroutine(drone.BringingCrystal(crystal));
             _crystalReserver.ReserveCrystal(crystal);
         }
     }

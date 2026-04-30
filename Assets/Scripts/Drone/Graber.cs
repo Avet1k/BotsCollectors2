@@ -1,13 +1,10 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Graber : MonoBehaviour
 {
     [SerializeField] private Vector3 _crystalOffset = new (0.17f, 4.8f, -3.82f);
     
-    public event UnityAction<bool> CrystalGrabbed;
-    
-    public void Grab(Crystal crystal)
+    public bool TryGrab(Crystal crystal)
     {
         bool isGrabbed;
 
@@ -24,6 +21,6 @@ public class Graber : MonoBehaviour
             isGrabbed = false;
         }
         
-        CrystalGrabbed?.Invoke(isGrabbed);
+        return isGrabbed;
     }
 }

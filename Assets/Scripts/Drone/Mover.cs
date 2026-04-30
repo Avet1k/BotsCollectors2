@@ -1,19 +1,11 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Mover : MonoBehaviour
 {
     [SerializeField] private float _speed = 40f;
-
-    public event UnityAction TargetReached;
-
-    public void MoveTo(Vector3 target)
-    {
-        StartCoroutine(Moving(target));
-    }
     
-    private IEnumerator Moving(Vector3 target)
+    public IEnumerator MovingTo(Vector3 target)
     {
         while (transform.position != target)
         {
@@ -24,7 +16,5 @@ public class Mover : MonoBehaviour
 
             yield return null;
         }
-        
-        TargetReached?.Invoke();
     }
 }
