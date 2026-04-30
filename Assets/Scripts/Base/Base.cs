@@ -32,11 +32,13 @@ public class Base : MonoBehaviour
     private void OnEnable()
     {
         _crystalDetector.Detected += OnCrystalDetected;
+        _crystalCounter.OnCrystalsChanged += Produce;
     }
 
     private void OnDisable()
     {
         _crystalDetector.Detected -= OnCrystalDetected;
+        _crystalCounter.OnCrystalsChanged -= Produce;
     }
 
     private void Start()
@@ -46,16 +48,10 @@ public class Base : MonoBehaviour
         Initialize(_crystalReserver);
     }
 
-    public void BuildBase(Vector3 position)
+    public void SetBaseBuildFlag(Vector3 position)
     {
         if (_dronesPark.DronesAvailable > _dronesReserved)
-        {
             _flag = _flagPlacer.PlaceFlag(position);
-
-            StopCoroutine(_spawningDrone);
-            Debug.Log("Coroutine stopped" + _spawningDrone.GetHashCode());
-            CountResources();
-        }
     }
 
     public void Initialize(CrystalReserver crystalReserver)
@@ -66,7 +62,6 @@ public class Base : MonoBehaviour
             _crystalReserver = crystalReserver;
 
         _dronesPark.SpawnDrones(_startDrones);
-        _spawningDrone = StartCoroutine(SpawningDrones());
         _crystalDetector.StartDetection();
     }
 
@@ -75,21 +70,12 @@ public class Base : MonoBehaviour
         _dronesPark.ParkNewDrone(drone);
     }
 
-    private void CountResources()
+    private void Produce(int amount)
     {
-        if (_crystalCounter.Quantity < _buildCost)
-        {
-            StartCoroutine(WaitingForEnoughCrystals());
-
-            return;
-        }
-
-        OnEnoughResources();
-    }
-
-    private void OnEnoughResources()
-    {
-        StartCoroutine(GettingDrone());
+        if (_flag is null && amount >= _droneCost)
+            SpawnDrone();
+        else if (_flag is not null && amount >= _buildCost)
+            StartCoroutine(GettingDrone());
     }
 
     private void OnGettingDrone(Drone drone)
@@ -98,7 +84,7 @@ public class Base : MonoBehaviour
         drone.BuildNewBase(_flag);
         _dronesPark.ReleaseDrone(drone);
         _flag = null;
-        _spawningDrone = StartCoroutine(SpawningDrones());
+        //TODO event counter -
     }
 
     private void OnCrystalDetected(Crystal crystal)
@@ -127,31 +113,12 @@ public class Base : MonoBehaviour
         _crystalReserver.CancelReservation(crystal);
     }
 
-    private IEnumerator SpawningDrones()
+    private void SpawnDrone()
     {
         int dronesAmount = 1;
-        bool isWorking = true;
-
-        while (isWorking)
-        {
-            if (_crystalCounter.Quantity >= _droneCost)
-            {
-                _crystalCounter.RemoveCrystals(_droneCost);
-                _dronesPark.SpawnDrones(dronesAmount);
-            }
-
-            yield return null;
-        }
-    }
-
-    private IEnumerator WaitingForEnoughCrystals()
-    {
-        while (_crystalCounter.Quantity < _buildCost)
-        {
-            yield return null;
-        }
-
-        CountResources();
+        
+        _crystalCounter.RemoveCrystals(_droneCost);
+        _dronesPark.SpawnDrones(dronesAmount);
     }
 
     private IEnumerator GettingDrone()

@@ -35,7 +35,7 @@ public class RaycastHandler : MonoBehaviour
             if (_base == null)
                 return;
 
-            _base.BuildBase(hit.point);
+            _base.SetBaseBuildFlag(hit.point);
             _base = null;
         }
     }
